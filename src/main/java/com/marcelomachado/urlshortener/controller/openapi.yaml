@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: URL Shortener API
+  description: API para encurtador de URLs
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /url-shortener:
+    post:
+      summary: Cria uma nova URL e retorna de forma síncrona
+      description: Cria uma nova URL e retorna de forma síncrona
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: string
+          required: true
+          description: URL a ser encurtada
+      responses:
+        201:
+          description: URL encurtada criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL encurtada
+    get:
+      summary: Retorna a URL salva
+      description: Retorna a URL salva
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: string
+          required: true
+          description: URL salva
+      responses:
+        200:
+          description: URL salva retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: URL salva
+
+  /url-shortner-kafka:
+    post:
+      summary: Encaminha a URL para Kafka
+      description: Encaminha a URL para Kafka
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: string
+          required: true
+          description: URL a ser encurtada
+      responses:
+        202:
+          description: URL encaminhada para Kafka com sucesso
