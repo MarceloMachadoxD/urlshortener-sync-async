@@ -30,6 +30,8 @@ paths:
                   url:
                     type: string
                     description: URL encurtada
+        404:
+          description: URL inválida
     get:
       summary: Retorna a URL salva
       description: Retorna a URL salva
