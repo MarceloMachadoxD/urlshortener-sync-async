@@ -19,6 +19,7 @@ public class UrlShortenerController {
     @PostMapping()
     public ResponseEntity<String> postUrl(@RequestParam String url) {
         if (!isValidUrl(url)) {
+            log.error("Invalid url: {}", url);
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(url);
