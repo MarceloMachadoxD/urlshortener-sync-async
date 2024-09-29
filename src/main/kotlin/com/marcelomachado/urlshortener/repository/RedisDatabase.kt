@@ -20,7 +20,8 @@ class RedisDatabase(private val redisTemplate: ReactiveRedisTemplate<String, Str
     }
 
     override fun getUrl(url: String): Mono<String> {
-        redisTemplate.opsForValue().get(md5(url))
+        val hashedUrl = md5(url)
+        redisTemplate.opsForValue().get(hashedUrl)
         return Mono.just(url)
     }
 }
