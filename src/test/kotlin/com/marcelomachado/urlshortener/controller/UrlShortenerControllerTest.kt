@@ -1,7 +1,10 @@
 package com.marcelomachado.urlshortener.controller
 
 import com.marcelomachado.urlshortener.service.UrlShortenerService
-import io.mockk.*
+import io.mockk.clearMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -16,7 +19,6 @@ class UrlShortenerControllerTest {
 
     @Autowired
     private lateinit var urlShortenerController: UrlShortenerController
-
 
     private lateinit var urlShortenerService: UrlShortenerService
 
