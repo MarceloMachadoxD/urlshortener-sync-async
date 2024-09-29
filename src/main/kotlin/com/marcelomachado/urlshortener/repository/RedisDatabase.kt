@@ -15,7 +15,7 @@ class RedisDatabase(private val redisTemplate: ReactiveRedisTemplate<String, Str
         val hashedUrl = md5(url)
         return redisTemplate.opsForValue()
             .set(hashedUrl, url, defaultTtl)
-            .thenReturn(UrlShort(0, url, hashedUrl))
+            .thenReturn(UrlShort(null, url, hashedUrl))
 
     }
 
