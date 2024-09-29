@@ -9,6 +9,24 @@ services:
       environment:
         - ALLOW_EMPTY_PASSWORD=yes
 
+    postgres:
+      image: postgres:latest
+      container_name: url-shortener-postgres
+      ports:
+        - "5432:5432"
+      environment:
+        - POSTGRES_USER=myuser
+        - POSTGRES_PASSWORD=mypassword
+        - POSTGRES_DB=mydb
+
+    pgadmin:
+      image: dpage/pgadmin4
+      container_name: url-shortener-pgadmin
+      ports:
+        - "5050:80"
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=2XGJt@example.com
+        - PGADMIN_DEFAULT_PASSWORD=admin
 networks:
   default:
     external: true
