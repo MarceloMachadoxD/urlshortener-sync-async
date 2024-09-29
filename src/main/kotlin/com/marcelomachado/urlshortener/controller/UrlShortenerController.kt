@@ -27,13 +27,13 @@ class UrlShortenerController(private val urlShortenerService: UrlShortenerServic
 
     @PostMapping
     fun postUrl(@RequestParam url: String): Mono<ResponseEntity<String>> {
-        return Mono.just(url)
-            .filter { isValidUrl(url) }
-            .flatMap { urlShortenerService.shortenUrl(url) }
-            .map { shortenedUrl -> ResponseEntity.status(HttpStatus.CREATED).body(shortenedUrl) }
-            .switchIfEmpty(returnBadRequest(url))
-            .onErrorResume { returnBadRequest(url) }
-
+        return if (isValidUrl(url)) {
+            urlShortenerService.shortenUrl(url)
+                .map { shortenedUrl -> ResponseEntity.status(HttpStatus.CREATED).body(shortenedUrl) }
+                .onErrorResume { returnBadRequest(url) }
+        } else {
+            returnBadRequest(url)
+        }
     }
 
     private fun returnBadRequest(url: String): Mono<ResponseEntity<String>> {
