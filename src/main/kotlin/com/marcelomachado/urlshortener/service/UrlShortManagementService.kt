@@ -19,19 +19,34 @@ class UrlShortManagementService {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-
     fun processUrl(urlShort: UrlShort): Mono<UrlShort> {
-
-        return urlShortRepository.save(urlShort)
-            .doOnSuccess { logger.info("Saved URL on Database: ${urlShort.originalUrl} as ${urlShort.hashedUrl}") }
+        return saveToDatabase(urlShort)
             .flatMap { savedUrlShort ->
-                redisDatabase.saveUrl(urlShort)
-                    .doOnSuccess { logger.info("Saved URL on Redis: $urlShort.originalUrl as ${urlShort.hashedUrl}") }
+                saveToRedis(savedUrlShort)
             }
             .doOnError { error ->
-                println("Error on save URL: ${error.message}")
+                logger.error("Error processing URL: ${urlShort.originalUrl}, Error: ${error.message}")
             }
     }
 
+    private fun saveToDatabase(urlShort: UrlShort): Mono<UrlShort> {
+        return urlShortRepository.save(urlShort)
+            .doOnSuccess { savedUrlShort ->
+                logger.info("Saved URL on Database: ${savedUrlShort.originalUrl} as ${savedUrlShort.hashedUrl}")
+            }
+            .doOnError { error ->
+                logger.error("Error saving URL to Database: ${urlShort.originalUrl}, Error: ${error.message}")
+            }
+    }
 
+    private fun saveToRedis(urlShort: UrlShort): Mono<UrlShort> {
+        return redisDatabase.saveUrl(urlShort)
+            .doOnSuccess {
+                logger.info("Saved URL on Redis: ${urlShort.originalUrl} as ${urlShort.hashedUrl}")
+            }
+            .doOnError { error ->
+                logger.error("Error saving URL to Redis: ${urlShort.originalUrl}, Error: ${error.message}")
+            }
+            .thenReturn(urlShort)
+    }
 }
