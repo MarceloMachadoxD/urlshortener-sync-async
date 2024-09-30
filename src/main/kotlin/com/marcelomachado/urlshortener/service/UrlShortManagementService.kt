@@ -20,10 +20,11 @@ class UrlShortManagementService {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     fun processUrl(urlShort: UrlShort): Mono<UrlShort> {
-        return saveToDatabase(urlShort)
-            .flatMap { savedUrlShort ->
-                saveToRedis(savedUrlShort)
-            }
+        val saveToDbMono = saveToDatabase(urlShort)
+        val saveToRedisMono = saveToRedis(urlShort)
+
+        return Mono.zip(saveToDbMono, saveToRedisMono)
+            .map { it.t1 }
             .doOnError { error ->
                 logger.error("Error processing URL: ${urlShort.originalUrl}, Error: ${error.message}")
             }
