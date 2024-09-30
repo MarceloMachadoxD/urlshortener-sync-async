@@ -31,13 +31,20 @@ class UrlShortManagementService {
     }
 
     private fun saveToDatabase(urlShort: UrlShort): Mono<UrlShort> {
-        return urlShortRepository.save(urlShort)
-            .doOnSuccess { savedUrlShort ->
-                logger.info("Saved URL on Database: ${savedUrlShort.originalUrl} as ${savedUrlShort.hashedUrl}")
+        return urlShortRepository.findFirstByOriginalUrlOrderByIdDesc(urlShort.originalUrl)
+            .flatMap { existingUrlShort ->
+                logger.info("URL already on Database: ${urlShort.originalUrl} as ${urlShort.hashedUrl}")
+                Mono.just(existingUrlShort)
             }
-            .doOnError { error ->
-                logger.error("Error saving URL to Database: ${urlShort.originalUrl}, Error: ${error.message}")
-            }
+            .switchIfEmpty(
+                urlShortRepository.save(urlShort)
+                    .doOnSuccess { savedUrlShort ->
+                        logger.info("Saved URL on Database: ${savedUrlShort.originalUrl} as ${savedUrlShort.hashedUrl}")
+                    }
+                    .doOnError { error ->
+                        logger.error("Error saving URL to Database: ${urlShort.originalUrl}, Error: ${error.message}")
+                    }
+            )
     }
 
     private fun saveToRedis(urlShort: UrlShort): Mono<UrlShort> {

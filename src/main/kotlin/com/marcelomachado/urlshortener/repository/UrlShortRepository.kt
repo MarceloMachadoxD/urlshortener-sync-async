@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 @Repository
 interface UrlShortRepository : ReactiveCrudRepository<UrlShort, Long> {
 
-    fun findByOriginalUrl(originalUrl: String): Mono<UrlShort>
+    fun findFirstByOriginalUrlOrderByIdDesc(originalUrl: String): Mono<UrlShort>
 
     fun findByHashedUrl(hashedUrl: String): Mono<UrlShort>
 
