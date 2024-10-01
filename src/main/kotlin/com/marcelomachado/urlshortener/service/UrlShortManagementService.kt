@@ -57,4 +57,31 @@ class UrlShortManagementService {
             }
             .thenReturn(urlShort)
     }
+
+    fun getOriginalUrl(hashedUrl: String): Mono<String> {
+        return getOriginalUrlFromRedis(hashedUrl)
+            .doOnSuccess { originalUrl ->
+                if (originalUrl != null) {
+                    logger.info("Original URL from Redis: $originalUrl")
+                }
+            }
+            .switchIfEmpty(
+                getOriginalUrlFromDatabase(hashedUrl)
+                    .doOnSuccess { originalUrl ->
+                        logger.info("Original URL from Database: $originalUrl")
+                    }
+            )
+            .doOnError { error ->
+                logger.error("Error getting original URL: ${hashedUrl}, Error: ${error.message}")
+            }
+    }
+
+    private fun getOriginalUrlFromRedis(hashedUrl: String): Mono<String> {
+        return redisDatabase.getUrl(hashedUrl)
+    }
+
+    private fun getOriginalUrlFromDatabase(hashedUrl: String): Mono<String> {
+        return urlShortRepository.findFirstByHashedUrlOrderByIdDesc(hashedUrl)
+            .map { it.originalUrl }
+    }
 }

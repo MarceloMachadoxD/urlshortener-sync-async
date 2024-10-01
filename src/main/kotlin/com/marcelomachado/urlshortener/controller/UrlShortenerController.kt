@@ -19,10 +19,11 @@ class UrlShortenerController(private val urlShortenerService: UrlShortenerServic
 
     @GetMapping
     fun getUrl(@RequestParam url: String): Mono<ResponseEntity<String>> {
-        return Mono.just(url)
-            .filter { isValidUrl(url) }
-            .flatMap { Mono.just(ResponseEntity.ok(url)) }
-            .switchIfEmpty(returnBadRequest(url))
+        return urlShortenerService.getOriginalUrl(url)
+            .flatMap { originalUrl ->
+                Mono.just(ResponseEntity.ok(originalUrl))
+            }
+            .onErrorResume { returnBadRequest(url) }
     }
 
     @PostMapping

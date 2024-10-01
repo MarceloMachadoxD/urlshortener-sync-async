@@ -10,6 +10,6 @@ interface UrlShortRepository : ReactiveCrudRepository<UrlShort, Long> {
 
     fun findFirstByOriginalUrlOrderByIdDesc(originalUrl: String): Mono<UrlShort>
 
-    fun findByHashedUrl(hashedUrl: String): Mono<UrlShort>
+    fun findFirstByHashedUrlOrderByIdDesc(hashedUrl: String): Mono<UrlShort>
 
 }

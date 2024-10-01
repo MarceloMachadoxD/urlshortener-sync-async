@@ -31,4 +31,11 @@ class UrlShortenerService {
             }
             .doOnError { error -> logger.error("Error saving URL: ${error.message}") }
     }
+
+    fun getOriginalUrl(hashedUrl: String): Mono<String> {
+        val cleanHashedUrl = hashedUrl.replace(baseUrl, "")
+        return urlShortManagementService.getOriginalUrl(cleanHashedUrl)
+            .doOnError { error -> logger.error("Error getting original URL: ${error.message}") }
+    }
+
 }
