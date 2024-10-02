@@ -1,41 +1,25 @@
 package com.marcelomachado.urlshortener.service
 
-import com.marcelomachado.urlshortener.entity.UrlShort
-import com.marcelomachado.urlshortener.util.Utils
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
-@Service
-class UrlShortenerService {
+interface UrlShortenerService {
 
-    @Autowired
-    private lateinit var urlShortManagementService: UrlShortManagementService
+    /**
+     * Short the given URL and return the hashed URL with prefix setup in application.properties calling the proper
+     * service to persist data
+     *
+     * @param url URL to be shortened
+     *
+     * @return Mono<String> with the shortened URL
+     */
+    fun shortenUrl(url: String): Mono<String>
 
-    @Value("\${app.base-url}")
-    private lateinit var baseUrl: String
-
-    private val logger = LoggerFactory.getLogger(this.javaClass)
-
-
-    fun shortenUrl(url: String): Mono<String> {
-        val hashedUrl = Utils.md5(url)
-        val urlShort = UrlShort(null, url, hashedUrl)
-
-        return urlShortManagementService.processUrl(urlShort)
-            .map { savedUrlShort ->
-                logger.info("Saved URL in both databases: $savedUrlShort")
-                baseUrl + savedUrlShort.hashedUrl
-            }
-            .doOnError { error -> logger.error("Error saving URL: ${error.message}") }
-    }
-
-    fun getOriginalUrl(hashedUrl: String): Mono<String> {
-        val cleanHashedUrl = hashedUrl.replace(baseUrl, "")
-        return urlShortManagementService.getOriginalUrl(cleanHashedUrl)
-            .doOnError { error -> logger.error("Error getting original URL: ${error.message}") }
-    }
-
+    /**
+     * Get the original URL from persisted database using the hashed URL as key
+     *
+     * @param hashedUrl hashed URL that can provide the prefix setup in application.properties or just hashCode
+     *
+     * @return Mono<String> with the original URL
+     */
+    fun getOriginalUrl(hashedUrl: String): Mono<String>
 }
