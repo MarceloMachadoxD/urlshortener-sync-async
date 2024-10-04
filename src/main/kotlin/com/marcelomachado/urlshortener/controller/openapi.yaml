@@ -54,7 +54,7 @@ paths:
                     type: string
                     description: URL salva
 
-  /url-shortner-kafka:
+  /url-shortener/kafka:
     post:
       summary: Encaminha a URL para Kafka
       description: Encaminha a URL para Kafka
