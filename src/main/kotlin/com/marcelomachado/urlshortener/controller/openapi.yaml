@@ -56,7 +56,7 @@ paths:
 
   /url-shortener/kafka:
     post:
-      summary: Encaminha a URL para Kafka
+      summary: Processa a URL de forma assíncrona
       description: Encaminha a URL para Kafka
       parameters:
         - in: query
