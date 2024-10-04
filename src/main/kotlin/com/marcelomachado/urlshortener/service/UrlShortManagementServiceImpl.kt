@@ -17,6 +17,9 @@ class UrlShortManagementServiceImpl : UrlShortManagementService {
     @Autowired
     private lateinit var urlShortRepository: UrlShortRepository
 
+    @Autowired
+    private lateinit var kafkaProducerService: KafkaProducerService
+
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun processUrl(urlShort: UrlShort): Mono<UrlShort> {
@@ -74,6 +77,14 @@ class UrlShortManagementServiceImpl : UrlShortManagementService {
             .doOnError { error ->
                 logger.error("Error getting original URL: ${hashedUrl}, Error: ${error.message}")
             }
+    }
+
+    override fun processUrlKafka(urlShort: UrlShort): Mono<String> {
+        return kafkaProducerService.sendMessage(urlShort)
+            .doOnError { error ->
+                logger.error("Error processing URL: ${urlShort.originalUrl}, Error: ${error.message}")
+            }
+            .thenReturn(urlShort.hashedUrl)
     }
 
     private fun getOriginalUrlFromRedis(hashedUrl: String): Mono<String> {

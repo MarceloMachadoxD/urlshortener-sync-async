@@ -38,4 +38,14 @@ class UrlShortenerServiceImpl : UrlShortenerService {
             .doOnError { error -> logger.error("Error getting original URL: ${error.message}") }
     }
 
+    override fun shortenUrlKafka(url: String): Mono<String> {
+        val hashedUrl = Utils.md5(url)
+        val urlShort = UrlShort(null, url, hashedUrl)
+        return urlShortManagementService.processUrlKafka(urlShort)
+            .doOnError { error -> logger.error("Error saving URL: ${error.message}") }
+            .doOnSuccess() { shortenedUrl ->
+                logger.info("Shortened URL: $shortenedUrl")
+            }
+    }
+
 }

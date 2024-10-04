@@ -37,6 +37,14 @@ class UrlShortenerController(private val urlShortenerService: UrlShortenerServic
         }
     }
 
+    @PostMapping("/kafka")
+    fun postUrlKafka(@RequestParam url: String): Mono<ResponseEntity<String>> {
+        return urlShortenerService.shortenUrlKafka(url)
+            .map {
+                ResponseEntity.status(HttpStatus.ACCEPTED).body(it)
+            }
+    }
+
     private fun returnBadRequest(url: String): Mono<ResponseEntity<String>> {
         logger.error("Invalid url: {}", url)
         return Mono.just(ResponseEntity.badRequest().build())

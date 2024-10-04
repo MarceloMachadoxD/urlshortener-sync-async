@@ -22,4 +22,11 @@ interface UrlShortenerService {
      * @return Mono<String> with the original URL
      */
     fun getOriginalUrl(hashedUrl: String): Mono<String>
+
+    /**
+     * Send the shortened URL to Kafka topic to be processed by the consumer
+     *
+     *  @param url URL to be sent to Kafka
+     */
+    fun shortenUrlKafka(url: String): Mono<String>
 }
