@@ -10,6 +10,8 @@ servers:
 paths:
   /url-shortener:
     post:
+      tags:
+        - Sync
       summary: Cria uma nova URL e retorna de forma síncrona
       description: Cria uma nova URL e retorna de forma síncrona
       parameters:
@@ -30,9 +32,17 @@ paths:
                   url:
                     type: string
                     description: URL encurtada
-        404:
-          description: URL inválida
+              examples:
+                example1:
+                  summary: URL encurtada
+                  value:
+                    url: "http://short.url/abc123"
+        400:
+          description: URL inválida, por favor, verifique o formato e tente novamente.
+
     get:
+      tags:
+        - Sync
       summary: Retorna a URL salva
       description: Retorna a URL salva
       parameters:
@@ -54,9 +64,11 @@ paths:
                     type: string
                     description: URL salva
 
-  /url-shortner-kafka:
+  /url-shortener/kafka:
     post:
-      summary: Encaminha a URL para Kafka
+      tags:
+        - Async
+      summary: Processa a URL de forma assíncrona
       description: Encaminha a URL para Kafka
       parameters:
         - in: query
@@ -68,3 +80,5 @@ paths:
       responses:
         202:
           description: URL encaminhada para Kafka com sucesso
+        400:
+          description: URL inválida, por favor, verifique o formato e tente novamente.

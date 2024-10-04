@@ -1,0 +1,131 @@
+{
+  "info": {
+    "_postman_id": "a9438077-9c57-4b4a-bef2-169f226e6498",
+    "name": "urlShortener",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38571350"
+  },
+  "item": [
+    {
+      "name": "badRequest",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/url-shortener?url=test",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "url-shortener"
+          ],
+          "query": [
+            {
+              "key": "url",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Success",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/url-shortener?url=http://myfrienddev.com/529a6e3ab932e602843d1e6f5fc384c6",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "url-shortener"
+          ],
+          "query": [
+            {
+              "key": "url",
+              "value": "http://myfrienddev.com/529a6e3ab932e602843d1e6f5fc384c6"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Success",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/url-shortener?url=http://www.google.com.br",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "url-shortener"
+          ],
+          "query": [
+            {
+              "key": "url",
+              "value": "http://www.google.com.br"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Success Kafka",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/url-shortener/kafka?url=http://www.google.com",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "url-shortener",
+            "kafka"
+          ],
+          "query": [
+            {
+              "key": "url",
+              "value": "http://www.google.com"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "badRequest",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/url-shortener?url=test",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "url-shortener"
+          ],
+          "query": [
+            {
+              "key": "url",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
