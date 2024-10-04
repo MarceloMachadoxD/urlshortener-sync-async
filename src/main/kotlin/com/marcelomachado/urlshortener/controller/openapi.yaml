@@ -30,8 +30,14 @@ paths:
                   url:
                     type: string
                     description: URL encurtada
+              examples:
+                example1:
+                  summary: URL encurtada
+                  value:
+                    url: "http://short.url/abc123"
         400:
-          description: URL inválida
+          description: URL inválida, por favor, verifique o formato e tente novamente.
+
     get:
       summary: Retorna a URL salva
       description: Retorna a URL salva
@@ -68,3 +74,5 @@ paths:
       responses:
         202:
           description: URL encaminhada para Kafka com sucesso
+        400:
+          description: URL inválida, por favor, verifique o formato e tente novamente.
