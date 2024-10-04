@@ -27,7 +27,7 @@ interface UrlShortManagementService {
     /**
      * Send the shortened URL to Kafka topic to be processed by the consumer
      *
-     *  @param url URL to be sent to Kafka
+     *  @param urlShort URL to be sent to Kafka
      */
     fun processUrlKafka(urlShort: UrlShort): Mono<String>
 }
