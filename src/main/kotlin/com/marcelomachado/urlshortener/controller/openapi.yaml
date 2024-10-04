@@ -10,6 +10,8 @@ servers:
 paths:
   /url-shortener:
     post:
+      tags:
+        - Sync
       summary: Cria uma nova URL e retorna de forma síncrona
       description: Cria uma nova URL e retorna de forma síncrona
       parameters:
@@ -39,6 +41,8 @@ paths:
           description: URL inválida, por favor, verifique o formato e tente novamente.
 
     get:
+      tags:
+        - Sync
       summary: Retorna a URL salva
       description: Retorna a URL salva
       parameters:
@@ -62,6 +66,8 @@ paths:
 
   /url-shortener/kafka:
     post:
+      tags:
+        - Async
       summary: Processa a URL de forma assíncrona
       description: Encaminha a URL para Kafka
       parameters:
